@@ -1,8 +1,8 @@
 # Broadcast appointment operations without exposing patient context
 
-I built this small service to accept an appointment workflow notice, decide its urgency, and publish one patient-safe event to every healthtech member. Infrai keeps the fanout behind one API and a single `INFRAI_API_KEY`; this example needs no realtime SDK. It took me a weekend to get the shape right.
+I threw together this small service to accept an appointment workflow notice, decide its urgency, and publish one patient-safe event to every healthtech member. Infrai handles the fanout behind one API and a single `INFRAI_API_KEY`; this example needed no realtime SDK. The first working version cost me a Sunday afternoon.
 
-The working path is short: validate the operator's request, remove the internal appointment reference from the broadcast shape, then publish to `healthtech-members`. The service returns the reference to its own caller for correlation. Subscribers never receive it.
+The working path stays short: validate the operator's request, drop the internal appointment reference from the broadcast shape, then publish to `healthtech-members`. The service returns the reference to its own caller for correlation. Subscribers never get it.
 
 ## Run the path
 
@@ -43,7 +43,7 @@ npm test
 npm run typecheck
 ```
 
-The focused test fixes the clock, submits a near-term delay, checks the urgent decision, and proves that the internal reference is not serialized into the broadcast.
+I wrote a focused test that freezes the clock, submits a near-term delay, checks the urgent decision, and proves the internal reference never gets serialized into the broadcast.
 
 ## One architecture decision
 
